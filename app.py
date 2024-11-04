@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from asgiref.wsgi import WsgiToAsgi
 import benchmark
 app = Flask(__name__)
 
@@ -30,6 +31,11 @@ def get_result():
         return jsonify({"result": latest_result})
     else:
         return jsonify({"error": "No result available"}), 404
+
+
+# to use with uvicorn
+asgi_app = WsgiToAsgi(app)
+
 
 if __name__ == '__main__':
     app.run(debug=False)
