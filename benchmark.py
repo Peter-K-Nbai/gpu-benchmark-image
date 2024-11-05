@@ -1,26 +1,32 @@
-import tensorflow as tf
+import torch
 import time
 
 
+# pip3 install torch --index-url https://download.pytorch.org/whl/cu118
+
 def check_gpu():
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    if gpus:
+    # Check if GPU is available
+    if torch.cuda.is_available():
         return True
     else:
+        device = torch.device("cpu")
         return False
 
 
 def benchmark(n: int):
-    # create random matrices
-    A = tf.random.uniform((n, n), minval=0, maxval=1, dtype=tf.float32)
-    B = tf.random.uniform((n, n), minval=0, maxval=1, dtype=tf.float32)
+    # Determine the device to use
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
 
-    # warm up to ensure everything is loaded
-    _ = tf.matmul(A, B)
-
+    # Create two random matrices on the GPU
+    matrix_a = torch.randn(n, n, device=device)
+    matrix_b = torch.randn(n, n, device=device)
+    
     # benchmark matrix multiplication
     start_time = time.time()
-    C = tf.matmul(A, B)
+    result = torch.matmul(matrix_a, matrix_b)
     end_time = time.time()
 
     return end_time - start_time
