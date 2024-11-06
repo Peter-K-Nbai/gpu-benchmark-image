@@ -1,3 +1,5 @@
 swan-sdk
 flask
 uvicorn
+asgiref
+torch
