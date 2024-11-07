@@ -1,5 +1,5 @@
 # Start from the NVIDIA CUDA base image
-FROM python:3.10-bullseye
+FROM nvidia/cuda:12.6.2-base-ubuntu24.04
 
 # Set up the working directory in the container
 WORKDIR /app
